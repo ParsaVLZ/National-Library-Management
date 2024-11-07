@@ -111,4 +111,12 @@ export class BookService {
     }
     return book;
   }
+
+  async findAllByLibraryId(libraryId: string) {
+    return this.bookRepository.find({
+      where: { library: { libraryId } },
+      relations: ['library'],
+    });
+  }
+  
 }

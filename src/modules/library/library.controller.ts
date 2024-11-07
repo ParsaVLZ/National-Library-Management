@@ -1,4 +1,4 @@
-import { Controller, Post, Body, Put, Param, Get, Delete, UseGuards, Query, Res } from '@nestjs/common';
+import { Controller, Post, Body, Put, Param, Get, Delete, UseGuards, Query, Res, NotFoundException } from '@nestjs/common';
 import { LibraryService } from './library.service';
 import { CreateLibraryDto } from './dto/create-library.dto';
 import { UpdateLibraryDto } from './dto/update-library.dto';
@@ -11,12 +11,16 @@ import { Response } from 'express';
 import { PublicMessage } from 'src/common/enums/message.enum';
 import { SwaggerConsumes } from 'src/common/enums/swager-consumes.enum';
 import { AuthDecorator } from 'src/common/decorators/auth.decorator';
+import { BookService } from '../book/book.service';
 
 
 @ApiTags('Libraries')
 @Controller('libraries')
 export class LibraryController {
-  constructor(private readonly libraryService: LibraryService) {}
+  constructor(
+    private readonly libraryService: LibraryService,
+    private readonly bookService: BookService
+  ) {}
 
   @Post()
   @Roles(UserRole.ADMIN)
@@ -60,6 +64,19 @@ export class LibraryController {
     } catch (error) {
       res.status(error.status || 500).json({ message: error.message });
     }
+  }
+
+  @Get(':id/books')
+  @ApiOperation({ summary: 'Get all books available in a specific library' })
+  @ApiResponse({ status: 200, description: 'Books retrieved successfully' })
+  @ApiResponse({ status: 404, description: 'Library not found' })
+  async getBooksByLibraryId(@Param('id') id: string) {
+    // Check if the library exists
+    const library = await this.libraryService.findOne(id);
+    if (!library) {
+      throw new NotFoundException('Library not found');
+    }
+    return this.bookService.findAllByLibraryId(id);
   }
 
   @Get(':id')
