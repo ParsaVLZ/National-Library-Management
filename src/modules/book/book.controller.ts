@@ -5,7 +5,7 @@ import { UpdateBookDto } from './dto/update-book.dto';
 import { PaginationDto } from '../../common/dtos/pagination.dto';
 import { Roles } from '../../common/decorators/roles.decorator';
 import { UserRole } from '../../common/enums/role.enum';
-import {  ApiBody, ApiConsumes, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiConsumes, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { Request } from 'express';
 import { SwaggerConsumes } from 'src/common/enums/swager-consumes.enum';
 import { AuthDecorator } from 'src/common/decorators/auth.decorator';

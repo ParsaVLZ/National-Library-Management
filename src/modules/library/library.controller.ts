@@ -13,7 +13,6 @@ import { SwaggerConsumes } from 'src/common/enums/swager-consumes.enum';
 import { AuthDecorator } from 'src/common/decorators/auth.decorator';
 import { BookService } from '../book/book.service';
 
-
 @ApiTags('Libraries')
 @Controller('libraries')
 export class LibraryController {
@@ -71,7 +70,6 @@ export class LibraryController {
   @ApiResponse({ status: 200, description: 'Books retrieved successfully' })
   @ApiResponse({ status: 404, description: 'Library not found' })
   async getBooksByLibraryId(@Param('id') id: string) {
-    // Check if the library exists
     const library = await this.libraryService.findOne(id);
     if (!library) {
       throw new NotFoundException('Library not found');
